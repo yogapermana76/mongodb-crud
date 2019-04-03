@@ -11,6 +11,16 @@ class BookController {
       })
   }
 
+  static findOne(req, res) {
+    Book.findOne({ isbn: req.params.isbn })
+      .then(book => {
+        res.status(200).json(book)
+      })
+      .catch(err => {
+        res.status(500).json(err)
+      })
+  }
+
   static create(req, res) {
     let newBook = {
       isbn: req.body.isbn,
@@ -40,7 +50,7 @@ class BookController {
       })
   }
 
-  static updateOne(req, res) {
+  static update(req, res) {
     Book.update({ isbn : req.params.isbn },
       { $set : {
           isbn: req.body.isbn,

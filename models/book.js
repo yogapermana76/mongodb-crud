@@ -18,11 +18,32 @@ class Book {
           return db.collection('books').find().toArray()
         })
         .then(books => {
-          client.close()
           resolve(books)
+          client.close()
         })
         .catch(err => {
           reject(err)
+          client.close()
+        })
+    })
+  }
+
+  static findOne(params) {
+    return new Promise((resolve, reject) => {
+      const client = new MongoClient(url, { useNewUrlParser: true })
+      client
+        .connect()
+        .then(() => {
+          const db = client.db(mongo_crud)
+          return db.collection('books').findOne(params)
+        })
+        .then((book) => {
+          resolve(book)
+          client.close()
+        })
+        .catch(err => {
+          reject(err)
+          client.close()
         })
     })
   }
@@ -42,6 +63,7 @@ class Book {
         })
         .catch(err => {
           reject(err)
+          client.close()
         })
     })
   }
@@ -56,11 +78,12 @@ class Book {
           return db.collection('books').deleteOne(params)
         })
         .then(() => {
-          client.close()
           resolve('success deleted')
+          client.close()
         })
         .catch(err => {
           reject(err)
+          client.close()
         })
     })
   }
@@ -72,7 +95,7 @@ class Book {
         .connect()
         .then(() => {
           const db = client.db(mongo_crud)
-          return db.collection('books').updateOne(where, fields)
+          return db.collection('books').update(where, fields)
         })
         .then(() => {
           resolve('success updated')
@@ -80,6 +103,7 @@ class Book {
         })
         .catch(err => {
           reject(err)
+          client.close()
         })
     })
   }
